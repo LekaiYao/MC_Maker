@@ -234,26 +234,65 @@ htcondor/2016HelacOnia/DAG/submit_part_run_dag.sh
 htcondor/2016HelacOnia/DAG/submit_part_run_dag_range.sh
 ```
 
-运行前仍然需要先完成 LHE 切分，生成：
+### part_run 提交流程
+
+`part_run` 仍然从已有大 LHE 开始。第一步和主线相同，先切 LHE：
+
+```bash
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/LHE_SPLIT
+bash submit_lhe_split_range.sh <process> <job_start> <job_end> [skip_list]
+```
+
+这一步完成后应生成：
 
 ```text
 LHE/{process}/job_{ProcID}/setN.lhe
 LHE/{process}/job_{ProcID}/set_list.txt
 ```
 
-单个 job 提交：
+等 LHE split 的 Condor job 全部完成后，进入 `DAG` 目录。`part_run` 不使用旧主线的 `build_stage_subs_range.sh`，而是由 `build_part_run_dag.py` 直接为每个 `setN` 生成 per-set DAG 和对应 `.sub`。
+
+单个 job 只 build，不提交：
+
+```bash
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
+python3 build_part_run_dag.py <process> <ProcID>
+```
+
+这会生成：
+
+```text
+DAG/part_runs/{process}_job_{ProcID}/part_run_{process}_job_{ProcID}.dag
+DAG/part_runs/{process}_job_{ProcID}/submit/{STEP}_setN.sub
+DAG/part_logs/{process}_job_{ProcID}/
+```
+
+单个 job build 并提交 DAGMan：
 
 ```bash
 cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
 bash submit_part_run_dag.sh <process> <ProcID>
 ```
 
-批量提交：
+批量 build 并提交 DAGMan：
 
 ```bash
 cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
 bash submit_part_run_dag_range.sh <process> <start> <end> [skip_list]
 ```
+
+因此 `part_run` 的完整批量命令是：
+
+```bash
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/LHE_SPLIT
+bash submit_lhe_split_range.sh <process> <start> <end> [skip_list]
+
+# 等 LHE split 全部完成后：
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
+bash submit_part_run_dag_range.sh <process> <start> <end> [skip_list]
+```
+
+注意：`submit_part_run_dag.sh` 和 `submit_part_run_dag_range.sh` 内部会先调用 `build_part_run_dag.py` 生成 DAG/.sub，然后再 `condor_submit_dag`，所以通常不需要手动单独运行 build。
 
 `part_run` 生成的 DAG 和 `.sub` 存放在：
 
