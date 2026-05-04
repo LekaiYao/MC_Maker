@@ -87,3 +87,7 @@ HelacOnia2016/CMSSW_10_6_20/src/NtupleMaker/NtupleMaker/**
 !HelacOnia2016/CMSSW_10_6_20/src/NtupleMaker/NtupleMaker/test/
 !HelacOnia2016/CMSSW_10_6_20/src/NtupleMaker/NtupleMaker/test/NTUPLE.py
 HelacOnia2016/CMSSW_*/external/
+
+# Generated per-set part_run DAG artifacts
+htcondor/2016HelacOnia/DAG/part_runs/
+htcondor/2016HelacOnia/DAG/part_logs/

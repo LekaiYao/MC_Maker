@@ -205,3 +205,82 @@ htcondor/2016HelacOnia/DAG/submit_workflow_dag_range.sh
 htcondor/2016HelacOnia/DAG/workflow.dag
 htcondor/2016HelacOnia/bin/dag_stage_driver.py
 ```
+
+## part_run 分支：按 set 推进的 DAGMan 工作流
+
+`part_run` 分支新增一套实验性 DAGMan 提交流程。它不改变当前稳定主线，而是新增 per-set DAG：每个 `setN` 自己按顺序执行完整链路。
+
+旧主线的依赖粒度是 stage/job：
+
+```text
+job 内所有 set 完成 GEN -> 整个 job 进入 SIM -> 整个 job 进入 DIGI -> ...
+```
+
+`part_run` 的依赖粒度是 set：
+
+```text
+set1: GEN -> SIM -> DIGI -> HLT -> RECO -> MINIAOD -> NTUPLE
+set2: GEN -> SIM -> DIGI -> HLT -> RECO -> MINIAOD -> NTUPLE
+...
+```
+
+因此某个 `setN` 完成 GEN 后即可进入 SIM，不需要等待同一个 `job_{ProcID}` 的其它 set 完成 GEN。不同 set 之间互不依赖；若某个 set 失败，只会阻断该 set 的后续节点，其它 set 可继续推进。
+
+新增入口脚本：
+
+```text
+htcondor/2016HelacOnia/DAG/build_part_run_dag.py
+htcondor/2016HelacOnia/DAG/submit_part_run_dag.sh
+htcondor/2016HelacOnia/DAG/submit_part_run_dag_range.sh
+```
+
+运行前仍然需要先完成 LHE 切分，生成：
+
+```text
+LHE/{process}/job_{ProcID}/setN.lhe
+LHE/{process}/job_{ProcID}/set_list.txt
+```
+
+单个 job 提交：
+
+```bash
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
+bash submit_part_run_dag.sh <process> <ProcID>
+```
+
+批量提交：
+
+```bash
+cd /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG
+bash submit_part_run_dag_range.sh <process> <start> <end> [skip_list]
+```
+
+`part_run` 生成的 DAG 和 `.sub` 存放在：
+
+```text
+DAG/part_runs/{process}_job_{ProcID}/
+```
+
+对应日志存放在：
+
+```text
+DAG/part_logs/{process}_job_{ProcID}/
+```
+
+该流程复用现有 worker：
+
+```text
+bin/run_gen_condor.sh
+bin/run_sim_input_condor.sh
+bin/run_digi_input_condor.sh
+bin/run_hlt_input_condor.sh
+bin/run_reco_input_condor.sh
+bin/run_miniaod_input_condor.sh
+bin/run_ntuple_input_condor.sh
+```
+
+注意：真实 Condor 运行仍应在 AFS 提交区执行。若在本项目中修改 `part_run` 脚本，需要同步回：
+
+```text
+/afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia
+```
