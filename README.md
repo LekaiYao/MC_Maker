@@ -169,3 +169,39 @@ git push -u origin main
 ```
 
 正式推送前，建议先把 AFS 关键脚本复制进仓库中的固定目录并一起提交。
+
+## 提交区脚本同步规则
+
+`htcondor/2016HelacOnia/` 是 AFS 提交区主工作流脚本的 GitHub 镜像。真实 Condor 生产仍在 AFS 提交区运行：
+
+```text
+/afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia
+```
+
+同步原则：
+
+```text
+AFS 提交区 -> 本项目 htcondor/2016HelacOnia/ -> GitHub
+GitHub/本项目修改 -> AFS 提交区 -> 真实 Condor 运行
+```
+
+也就是说：
+
+1. 如果在 AFS 提交区修改了 DAGMan、submit 生成器或 worker 脚本，需要先把关键脚本拷贝回本项目的 `htcondor/2016HelacOnia/`，再提交到 GitHub。
+2. 如果在本项目/GitHub 中修改了提交区逻辑，需要把对应文件同步回 AFS 提交区后，才能用于真实生产提交。
+3. 不要把 `logs/`、`submit/`、`runs/`、`.sub`、`.log`、`.out`、`.err`、rescue 文件或 ROOT/LHE 数据产物纳入 GitHub。
+
+当前主线入口脚本：
+
+```text
+htcondor/2016HelacOnia/LHE_SPLIT/submit_lhe_split_range.sh
+htcondor/2016HelacOnia/DAG/build_stage_subs_range.sh
+htcondor/2016HelacOnia/DAG/submit_workflow_dag_range.sh
+```
+
+当前主线 DAG 和 stage driver：
+
+```text
+htcondor/2016HelacOnia/DAG/workflow.dag
+htcondor/2016HelacOnia/bin/dag_stage_driver.py
+```

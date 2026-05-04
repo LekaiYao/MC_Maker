@@ -1,0 +1,27 @@
+JOB GEN /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS GEN stage="GEN"
+
+JOB SIM /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS SIM stage="SIM"
+
+JOB DIGI /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS DIGI stage="DIGI"
+
+JOB HLT /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS HLT stage="HLT"
+
+JOB RECO /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS RECO stage="RECO"
+
+JOB MINIAOD /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS MINIAOD stage="MINIAOD"
+
+JOB NTUPLE /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia/DAG/submit/stage_driver.sub
+VARS NTUPLE stage="NTUPLE"
+
+PARENT GEN CHILD SIM
+PARENT SIM CHILD DIGI
+PARENT DIGI CHILD HLT
+PARENT HLT CHILD RECO
+PARENT RECO CHILD MINIAOD
+PARENT MINIAOD CHILD NTUPLE
