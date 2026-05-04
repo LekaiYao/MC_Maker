@@ -1,0 +1,83 @@
+# Data products and generated physics outputs
+*.root
+*.lhe
+*.hepmc
+*.lhe.gz
+*.root.*
+
+# Condor/runtime logs and generated submit artifacts
+*.log
+*.out
+*.err
+*.tmp
+*.rescue*
+*.dagman.*
+*.nodes.log
+nohup.out
+logs/
+submit/
+runs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# CMSSW build/runtime products. Keep lightweight cfg/driver scripts under src.
+HelacOnia2016/CMSSW_*/.SCRAM/
+HelacOnia2016/CMSSW_*/biglib/
+HelacOnia2016/CMSSW_*/bin/
+HelacOnia2016/CMSSW_*/cfipython/
+HelacOnia2016/CMSSW_*/config/
+HelacOnia2016/CMSSW_*/doc/
+HelacOnia2016/CMSSW_*/include/
+HelacOnia2016/CMSSW_*/lib/
+HelacOnia2016/CMSSW_*/logs/
+HelacOnia2016/CMSSW_*/objs/
+HelacOnia2016/CMSSW_*/python/
+HelacOnia2016/CMSSW_*/static/
+HelacOnia2016/CMSSW_*/test/
+HelacOnia2016/CMSSW_*/tmp/
+
+# Step outputs inside CMSSW src areas
+HelacOnia2016/CMSSW_*/src/LHE/
+HelacOnia2016/CMSSW_*/src/GEN/
+HelacOnia2016/CMSSW_*/src/SIM/
+HelacOnia2016/CMSSW_*/src/DIGI/
+HelacOnia2016/CMSSW_*/src/HLT/
+HelacOnia2016/CMSSW_*/src/RECO/
+HelacOnia2016/CMSSW_*/src/MINIAOD/
+HelacOnia2016/CMSSW_*/src/NTUPLE/
+HelacOnia2016/CMSSW_*/src/outdated_iofiles/
+HelacOnia2016/CMSSW_*/src/condor_*output*/
+HelacOnia2016/CMSSW_*/src/split_lhe*/
+
+# Output-check generated reports; keep scripts.
+output_check/*/
+!output_check/*.py
+
+# Private handoff/Codex documents should not be uploaded.
+docs/
+AGENTS.md
+.codex/
+
+# Build/editor/system files
+*.so
+*.pcm
+*.d
+*.o
+*.a
+*.exe
+.DS_Store
+.vscode/
+.idea/
+
+# Local scratch workspaces
+update/
+
+# Original/reference CMSSW configs and old ad-hoc submit helpers are not part of the main workflow commit.
+HelacOnia2016/CMSSW_*/src/BPH_*_cfg.py
+HelacOnia2016/CMSSW_10_6_20/src/NtupleMaker/NtupleMaker/test/BPH_NtupleMaker.py
+HelacOnia2016/CMSSW_10_6_20_patch1/src/condor_submit/
+HelacOnia2016/CMSSW_10_6_20_patch1/src/make_condor_submit.py
+HelacOnia2016/CMSSW_10_6_20_patch1/src/run_gen_condor.sh
+HelacOnia2016/CMSSW_10_6_20_patch1/src/submit_all_condor.sh
