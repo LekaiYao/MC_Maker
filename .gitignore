@@ -84,3 +84,4 @@ HelacOnia2016/CMSSW_10_6_20_patch1/src/submit_all_condor.sh
 
 # Nested NtupleMaker checkout is managed separately; do not commit it as a parent-repo submodule by accident.
 HelacOnia2016/CMSSW_10_6_20/src/NtupleMaker/NtupleMaker/
+HelacOnia2016/CMSSW_*/external/
