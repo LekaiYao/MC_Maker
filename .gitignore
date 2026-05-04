@@ -91,3 +91,5 @@ HelacOnia2016/CMSSW_*/external/
 # Generated per-set part_run DAG artifacts
 htcondor/2016HelacOnia/DAG/part_runs/
 htcondor/2016HelacOnia/DAG/part_logs/
+!output_check/part_run/
+!output_check/part_run/*.py

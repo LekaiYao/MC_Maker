@@ -284,3 +284,56 @@ bin/run_ntuple_input_condor.sh
 ```text
 /afs/cern.ch/user/l/leyao/private/JJ/MC_HTcondor/2016HelacOnia
 ```
+
+### part_run 输出检查与残余清理
+
+`part_run` 的检查单位是 `process + job_{ProcID} + setN`。成功判据只看最终文件是否存在：
+
+```text
+NTUPLE/{process}/job_{ProcID}/setN.root
+```
+
+若该 NTUPLE ROOT 不存在，检查脚本会从 `GEN -> ... -> NTUPLE` 查找最后一个仍存在的 step，并把下一步标记为失败步骤。例如最后存在 `SIM/setN.root`，则失败步骤为 `DIGI`。
+
+检查命令：
+
+```bash
+python3 output_check/part_run/check_part_run_outputs.py \
+  --process <process> \
+  --start <job_start> \
+  --end <job_end> \
+  [--skip <skip_list>]
+```
+
+报告输出：
+
+```text
+output_check/part_run/{process}/job{start}_{end}.md
+```
+
+残余清理脚本根据检查报告中的 `failed_step` 清理该 set 在失败步骤之前两步内的 ROOT：
+
+```text
+GEN 失败：不删除
+SIM 失败：只删除 GEN/setN.root
+DIGI 失败：删除 GEN/setN.root 和 SIM/setN.root
+HLT 失败：删除 SIM/setN.root 和 DIGI/setN.root
+...
+```
+
+默认 dry-run：
+
+```bash
+python3 output_check/part_run/cleanup_part_run_residuals.py \
+  --process <process> \
+  --report output_check/part_run/<process>/job<start>_<end>.md
+```
+
+确认后真实删除：
+
+```bash
+python3 output_check/part_run/cleanup_part_run_residuals.py \
+  --process <process> \
+  --report output_check/part_run/<process>/job<start>_<end>.md \
+  --apply
+```
