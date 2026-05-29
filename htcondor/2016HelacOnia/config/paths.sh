@@ -28,12 +28,12 @@ export HELAC_ONIA_BASE="/afs/cern.ch/user/l/leyao/work/26JJ/HelacOnia/HELAC-Onia
 export LHE_RUN_CARD="${HELAC_ONIA_BASE}/JJ_run.sh"
 
 # Current SPS processes enabled for submission
-export GEN_PROCESSES="ggpsi1psi1 ggpsi1psi1g"
+export GEN_PROCESSES="ggpsi1psi1 ggpsi1psi1g ggpsi1psi1g_gpt0p8"
 export SIM_PROCESSES="${GEN_PROCESSES}"
 export DIGI_PROCESSES="${GEN_PROCESSES}"
 export HLT_PROCESSES="${GEN_PROCESSES}"
 export RECO_PROCESSES="${GEN_PROCESSES}"
 export MINIAOD_PROCESSES="${GEN_PROCESSES}"
 export NTUPLE_PROCESSES="${GEN_PROCESSES}"
-export LHE_PROCESSES="ggpsi1psi1 ggpsi1psi1g"
+export LHE_PROCESSES="ggpsi1psi1 ggpsi1psi1g ggpsi1psi1g_gpt0p8"
 export LHE_JOBS_PER_PROCESS="1"

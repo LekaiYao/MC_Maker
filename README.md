@@ -15,6 +15,7 @@
 ```text
 ggpsi1psi1
 ggpsi1psi1g
+ggpsi1psi1g_gpt0p8
 ```
 
 每个 `process + ProcID` 对应的大 LHE 默认路径为：
